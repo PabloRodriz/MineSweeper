@@ -13,6 +13,7 @@ namespace ConsoleApplication2
 	class Program
 	{
 		GameField gF;
+		static int cont;
 		static void Main(string[] args)
 		{
 			int x = 0, y = 0;
@@ -26,7 +27,9 @@ namespace ConsoleApplication2
 			string ts = DateTime.Now.ToString();
 
 
-
+			Timer tim2 = new Timer(1000);
+			tim2.Elapsed += Timer;
+			tim2.Start();
 
 			do
 			{
@@ -61,8 +64,8 @@ namespace ConsoleApplication2
 					}
 				}
 
-				Console.SetCursorPosition(65, 0);
-				Console.WriteLine("PRUEBA TIMER");
+
+
 
 				//user interface
 				Console.SetCursorPosition(23 + 4 * x, 2 + 2 * y);
@@ -148,7 +151,15 @@ namespace ConsoleApplication2
 		private static void Tim_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			Console.Beep();
-			Console.WriteLine("GFKLKJKLJHGFDFGHJKLJHGFDJJHGFDFGJL");
+
+		}
+
+		private static void Timer(object sender, ElapsedEventArgs e)
+		{
+			cont++;
+			Console.SetCursorPosition(65, 0);
+			Console.WriteLine("{0} seconds",cont);
+
 		}
 	}
 }
