@@ -10,11 +10,12 @@ namespace ConsoleApplication2
 	{
 		private bool[,] mines, observed;
 		private int[,] minesAround, minesHelp;
-		private int numberOfMines = 10, sizeOfField = 10, numberOfFreePixels = 90, numberOfObservedPixels;
+		private int numberOfMines, sizeOfField = 10, numberOfFreePixels = 90, numberOfObservedPixels;
 		private int[] positionsOfMines = new int[10];
 
-		public GameField()
+		public GameField(int numberOfMines)
 		{
+			this.numberOfMines = numberOfMines;
 			numberOfObservedPixels = 0;
 			mines = new bool[sizeOfField, sizeOfField];
 			observed = new bool[sizeOfField, sizeOfField];
@@ -23,6 +24,11 @@ namespace ConsoleApplication2
 			GeneratedMines(numberOfMines, sizeOfField * sizeOfField);
 			PlacementOfMines();
 			MinesAroundDef();
+		}
+
+		public int getnumberOfMines(){
+			
+			return numberOfMines;
 		}
 
 		public int getNumber(int v1, int v2)
@@ -110,7 +116,7 @@ namespace ConsoleApplication2
 				observed[x, y] = true;
 				if (mines[x, y] == true)
 				{
-					return 1;//plosion
+					return 1;//xplosion
 				}
 				else
 				{

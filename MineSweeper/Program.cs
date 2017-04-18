@@ -20,17 +20,23 @@ namespace ConsoleApplication2
 			int ASCIIcisla = 48;
 			int ASCIIpismena = 65;
 			ConsoleKeyInfo hS;
-			GameField gf = new GameField();
+			GameField gf;
 
 			DRAW_INTERFACE DI = new DRAW_INTERFACE();
 			string klavesa = "0";
 			string ts = DateTime.Now.ToString();
 
 
+			Console.WriteLine("Introduce number of mines");
+			int numberOfmines = Int32.Parse(Console.ReadLine());
+			gf = new GameField(numberOfmines);
+
+			Console.WriteLine(gf.getnumberOfMines());
+
+
 			Timer tim2 = new Timer(1000);
 			tim2.Elapsed += Timer;
 			tim2.Start();
-
 			do
 			{
 				DI.clearConsole();
@@ -51,7 +57,13 @@ namespace ConsoleApplication2
 
 						if (gf.getObserved(j, i))
 						{
-							DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
+							//DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
+							if(gf.getNumber(j, i) == 0){
+								DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
+							}else{
+								
+							}
+
 						}
 						else
 						{
@@ -157,8 +169,11 @@ namespace ConsoleApplication2
 		private static void Timer(object sender, ElapsedEventArgs e)
 		{
 			cont++;
-			Console.SetCursorPosition(65, 0);
+			Console.SetCursorPosition(63, 0);
 			Console.WriteLine("{0} seconds",cont);
+
+			Console.SetCursorPosition(63, 2);
+			Console.WriteLine("Casillas");
 
 		}
 	}
