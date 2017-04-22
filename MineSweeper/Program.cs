@@ -92,6 +92,7 @@ namespace ConsoleApplication2
 
 				Console.SetCursorPosition(63, 1);
 				Console.WriteLine("Pos left: {0}" ,gf.getNumberOfObservedPixels());
+				Console.SetCursorPosition(31, 22);
 				Console.WriteLine("Press k to finish game");
 
 
