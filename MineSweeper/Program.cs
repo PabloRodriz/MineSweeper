@@ -22,6 +22,8 @@ namespace ConsoleApplication2
 			ConsoleKeyInfo hS;
 			GameField gf;
 
+
+
 			DRAW_INTERFACE DI = new DRAW_INTERFACE();
 			string klavesa = "0";
 			string ts = DateTime.Now.ToString();
@@ -36,10 +38,13 @@ namespace ConsoleApplication2
 
 			Timer tim2 = new Timer(1000);
 			tim2.Elapsed += Timer;
+
 			tim2.Start();
 			do
 			{
+				
 				DI.clearConsole();
+				printTimer();
 				DI.setColors(ConsoleColor.White, ConsoleColor.DarkBlue);
 				for (int i = 0; i < 10; i++)
 				{
@@ -60,8 +65,15 @@ namespace ConsoleApplication2
 							//DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
 							if(gf.getNumber(j, i) == 0){
 								DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
+								/*
+								for (int hi = 0; hi < 2; hi++)
+								{
+									
+									DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
+								}
+								*/
 							}else{
-								
+								DI.printASCII(ASCIIcisla + gf.getNumber(j, i), j, i, 23, 2);
 							}
 
 						}
@@ -75,6 +87,12 @@ namespace ConsoleApplication2
 
 					}
 				}
+
+
+
+				Console.SetCursorPosition(63, 1);
+				Console.WriteLine("Pos left: {0}" ,gf.getNumberOfObservedPixels());
+				Console.WriteLine("Press k to finish game");
 
 
 
@@ -134,6 +152,7 @@ namespace ConsoleApplication2
 				if (hS.Key == ConsoleKey.Enter)
 				{
 					int putput = gf.tryFild(x, y);
+
 					if (putput == 1)
 					{
 						DI.BOOM();
@@ -141,8 +160,31 @@ namespace ConsoleApplication2
 					}
 					if (putput == 2)
 					{
+						Console.SetCursorPosition(31,10);
 						Console.WriteLine("YOU WIN!");
 						break;
+					}
+
+					if(gf.getNumber(x, y) == 0){
+						// implementation: calculate with stack
+						int [,] fieldStack = new int[2, gf.getNumberOfObservedPixels()];
+						int numberOfFieldsStack = 0;
+						setUpStack(ref fieldStack, ref numberOfFieldsStack, x, y, gf);
+
+						while (numberOfFieldsStack != 0)
+						{
+							x = fieldStack[0, numberOfFieldsStack - 1];
+							y = fieldStack[1, numberOfFieldsStack - 1];
+							putput = gf.tryFild(x, y);
+							numberOfFieldsStack--;
+							if(putput == 2){
+								Console.SetCursorPosition(31, 10);
+								Console.WriteLine("YOU WIN!");
+								break;
+							}
+							setUpStack(ref fieldStack, ref numberOfFieldsStack, x, y, gf);
+						}
+
 					}
 				}
 
@@ -151,6 +193,10 @@ namespace ConsoleApplication2
 
 
 			} while (hS.Key != ConsoleKey.K);
+			tim2.Stop();
+			Console.SetCursorPosition(63, 0);
+			Console.BackgroundColor = ConsoleColor.Red;
+			Console.WriteLine("Final time: {0}", cont);
 
 			Timer tim = new Timer(1000);
 			tim.Elapsed += Tim_Elapsed;
@@ -158,6 +204,42 @@ namespace ConsoleApplication2
 			//DI.WaitingForEnd();
 			//DI.BOOM();
 			DI.WaitingForEnd();
+		}
+		private static void setUpStack(ref int[,] fieldStack, ref int numberOfFieldsStack,int x, int y, GameField gf ){
+			if (gf.getNumber(x, y) == 0)
+			{
+
+				for (int i = -1; i < 2; i++)
+				{
+					for (int j = -1; j < 2; j++)
+					{
+						if (j + x < 0 || i + y < 0 || i + y > 9 || j + x > 9)
+						{
+
+						}
+						else
+						{
+							if (gf.getObserved(x + j, y + i) == false)
+							{
+								if (gf.getIsInStack(x + j, y + i) == false)
+								{
+
+									fieldStack[0, numberOfFieldsStack] = x + j;
+									fieldStack[1, numberOfFieldsStack] = y + i;
+									numberOfFieldsStack++;
+									gf.setIsInStack(x + j, y + i);
+								}
+
+							}
+
+
+						}
+
+					}
+
+				}
+			}
+
 		}
 
 		private static void Tim_Elapsed(object sender, ElapsedEventArgs e)
@@ -171,10 +253,18 @@ namespace ConsoleApplication2
 			cont++;
 			Console.SetCursorPosition(63, 0);
 			Console.WriteLine("{0} seconds",cont);
-
+			/*
 			Console.SetCursorPosition(63, 2);
 			Console.WriteLine("Casillas");
+			*/
 
+		}
+
+		private static void printTimer(){
+			Console.SetCursorPosition(63, 0);
+			Console.BackgroundColor = ConsoleColor.Red;
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine("{0} seconds", cont);
 		}
 	}
 }

@@ -8,15 +8,24 @@ namespace ConsoleApplication2
 {
 	class GameField
 	{
-		private bool[,] mines, observed;
+		private bool[,] mines, observed, isInStack;
 		private int[,] minesAround, minesHelp;
 		private int numberOfMines, sizeOfField = 10, numberOfFreePixels = 90, numberOfObservedPixels;
 		private int[] positionsOfMines = new int[10];
+
 
 		public GameField(int numberOfMines)
 		{
 			this.numberOfMines = numberOfMines;
 			numberOfObservedPixels = 0;
+			isInStack = new bool[sizeOfField, sizeOfField];
+			for (int i = 0; i < sizeOfField; i++)
+			{
+				for (int j = 0; j < sizeOfField; j++)
+				{
+					isInStack[i, j] = false;
+				}
+			}
 			mines = new bool[sizeOfField, sizeOfField];
 			observed = new bool[sizeOfField, sizeOfField];
 			minesAround = new int[sizeOfField, sizeOfField];
@@ -24,6 +33,18 @@ namespace ConsoleApplication2
 			GeneratedMines(numberOfMines, sizeOfField * sizeOfField);
 			PlacementOfMines();
 			MinesAroundDef();
+		}
+
+		public bool getIsInStack(int v1, int v2){
+			return isInStack[v1, v2];
+		}
+
+		public void setIsInStack(int v1, int v2){
+			isInStack[v1, v2] = true;
+		}
+
+		public int getNumberOfObservedPixels(){
+			return 90 - numberOfObservedPixels;
 		}
 
 		public int getnumberOfMines(){
